@@ -20,34 +20,16 @@ var assert = require('assert');
 
 
 function ItemDAO(database) {
-    "use strict";
+    'use strict';
 
     this.db = database;
 
-    this.getCategories = function(callback) {
-        "use strict";
-        
-        /*
-        * TODO-lab1A
-        *
-        * LAB #1A: 
-        * Create an aggregation query to return the total number of items in each category. The
-        * documents in the array output by your aggregation should contain fields for 
-        * "_id" and "num". HINT: Test your mongodb query in the shell first before implementing 
-        * it in JavaScript.
-        *
-        * Ensure categories are organized in alphabetical order before passing to the callback.
-        *
-        * Include a document for category "All" in the categories to pass to the callback. All
-        * should identify the total number of documents across all categories.
-        *
-        */
+    this.getCategories = (callback) => {
+        'use strict';
 
-        var categories = [];
         var query = [
-            //{ $match: { category: { $ne: null } } },
             { $group: {
-                _id: "$category",
+                _id: '$category',
                 num: { $sum: 1 }
             } },
             { $sort: { _id: 1 } }
@@ -60,40 +42,13 @@ function ItemDAO(database) {
 
                 var allCount = docs.reduce((prev, current, index, array) => index === 1 ? prev.num + current.num : prev + current.num);
 
-                docs.push({
+                docs.unshift({
                     _id: 'All',
                     num: allCount
                 });
 
                 callback(docs);
-
-                //if (doc) {
-                //    allCount += doc.num;
-                //    categories.push(doc);
-                // @todo: make sure that this is okay approach
-                //} else {
-                //    categories.push({
-                //        _id: 'All',
-                //        num: allCount
-                //    });
-                //}
-
-                // debugging
-                //console.log('Documents:', docs);
-                //console.log('Categories:', categories);
-                //console.log('');
-                //console.log('');
             });
-
-        //var categories = [];
-        //var category = {
-        //    _id: "All",
-        //    num: 9999
-        //};
-
-        //categories.push(category);
-        // TODO-lab1A Replace all code above (in this method).
-        //callback(categories);
     };
 
 
