@@ -55,7 +55,8 @@ function ItemDAO(database) {
     this.getItems = function(category, page, itemsPerPage, callback) {
         'use strict';
 
-        var cursor = this.db.collection('item').find({});
+        var query = category === 'All' ? {} : { category: category };
+        var cursor = this.db.collection('item').find(query);
 
         // apply skip to the cursor, if necessary depending on the page
         if (page > 1 && page === 2) {
