@@ -68,10 +68,7 @@ function ItemDAO(database) {
          *
          */
 
-        var query = {};
-        //var projection = {};
-
-        var cursor = this.db.collection('item').find(query);
+        var cursor = this.db.collection('item').find({});
 
         if (page > 1 && page === 2) {
             cursor.skip(itemsPerPage);
