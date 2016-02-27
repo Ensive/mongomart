@@ -121,22 +121,8 @@ function ItemDAO(database) {
     };
 
 
-    this.getItem = function(itemId, callback) {
-        "use strict";
-
-        /*
-         * TODO-lab3
-         *
-         * LAB #3: Query the "item" collection by _id and pass the matching item
-         * to the callback function.
-         *
-         */
-        
-        //var item = this.createDummyItem();
-
-        // TODO-lab3 Replace all code above (in this method).
-
-        //callback(item);
+    this.getItem = (itemId, callback) => {
+        'use strict';
 
         this.db.collection('item')
             .find({ _id: itemId })
