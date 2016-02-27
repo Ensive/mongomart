@@ -15,8 +15,8 @@
 */
 
 
-var MongoClient = require('mongodb').MongoClient,
-    assert = require('assert');
+//var MongoClient = require('mongodb').MongoClient,
+var assert = require('assert');
 
 
 function ItemDAO(database) {
@@ -105,16 +105,33 @@ function ItemDAO(database) {
          *
          */
 
-        var pageItem = this.createDummyItem();
+        var query = {};
+        var projection = {};
+
+        var cursor = this.db.collection('item').find(query);
+
         var pageItems = [];
-        for (var i=0; i<5; i++) {
-            pageItems.push(pageItem);
-        }
+
+        cursor.forEach(
+            (doc) => {
+
+            },
+            (err) => {
+                assert.equal(err, null);
+                //return this.db.close();
+            }
+        );
+
+        var pageItem = this.createDummyItem();
+        //var pageItems = [];
+        //for (var i = 0; i < 5; i++) {
+        //    pageItems.push(pageItem);
+        //}
 
         // TODO-lab1B Replace all code above (in this method).
 
         callback(pageItems);
-    }
+    };
 
 
     this.getNumItems = function(category, callback) {
@@ -135,7 +152,7 @@ function ItemDAO(database) {
          */
         
         callback(numItems);
-    }
+    };
 
 
     this.searchItems = function(query, page, itemsPerPage, callback) {
@@ -165,7 +182,7 @@ function ItemDAO(database) {
         // TODO-lab2A Replace all code above (in this method).
 
         callback(items);
-    }
+    };
 
 
     this.getNumSearchItems = function(query, callback) {
@@ -183,7 +200,7 @@ function ItemDAO(database) {
         */
 
         callback(numItems);
-    }
+    };
 
 
     this.getItem = function(itemId, callback) {
@@ -202,7 +219,7 @@ function ItemDAO(database) {
         // TODO-lab3 Replace all code above (in this method).
 
         callback(item);
-    }
+    };
 
 
     this.getRelatedItems = function(callback) {
@@ -234,18 +251,18 @@ function ItemDAO(database) {
             comment: comment,
             stars: stars,
             date: Date.now()
-        }
+        };
 
         var dummyItem = this.createDummyItem();
         dummyItem.reviews = [reviewDoc];
         callback(dummyItem);
-    }
+    };
 
 
     this.createDummyItem = function() {
         "use strict";
 
-        var item = {
+        return {
             _id: 1,
             title: "Gray Hooded Sweatshirt",
             description: "The top hooded sweatshirt we offer",
@@ -257,7 +274,6 @@ function ItemDAO(database) {
             reviews: []
         };
 
-        return item;
     }
 }
 
