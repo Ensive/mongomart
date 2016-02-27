@@ -106,15 +106,24 @@ function ItemDAO(database) {
          */
 
         var query = {};
-        var projection = {};
+        //var projection = {};
 
         var cursor = this.db.collection('item').find(query);
+
+        if (page > 1 && page === 2) {
+            cursor.skip(itemsPerPage);
+        } else if (page > 2) {
+            cursor.skip((page - 1) * itemsPerPage);
+        }
+
+        cursor.limit(itemsPerPage);
 
         var pageItems = [];
 
         cursor.forEach(
             (doc) => {
-
+                console.log(doc);
+                pageItems.push(doc);
             },
             (err) => {
                 assert.equal(err, null);
@@ -122,7 +131,7 @@ function ItemDAO(database) {
             }
         );
 
-        var pageItem = this.createDummyItem();
+        //var pageItem = this.createDummyItem();
         //var pageItems = [];
         //for (var i = 0; i < 5; i++) {
         //    pageItems.push(pageItem);
