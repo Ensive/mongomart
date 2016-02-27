@@ -52,19 +52,16 @@ function ItemDAO(database) {
     };
 
 
+    // page starts from 0
     this.getItems = (category, page, itemsPerPage, callback) => {
         'use strict';
-
-        var actualPageNumber = page + 1;
 
         var query = category === 'All' ? {} : { category: category };
         var cursor = this.db.collection('item').find(query);
 
-        // apply skip to the cursor, if necessary depending on the page
-        if (actualPageNumber > 1 && actualPageNumber === 2) {
-            cursor.skip(itemsPerPage);
-        } else if (actualPageNumber > 2) {
-            cursor.skip((actualPageNumber - 1) * itemsPerPage);
+        // apply .skip() to the cursor if necessary, depending on the page
+        if (page && page > 0) {
+            cursor.skip(this.paginate(page, itemsPerPage));
         }
 
         cursor.limit(itemsPerPage);
@@ -208,7 +205,15 @@ function ItemDAO(database) {
             reviews: []
         };
 
-    }
+    };
+
+    this.paginate = (page, itemsPerPage) => {
+        if (page > 0 && page === 1) {
+            return itemsPerPage;
+        } else if (page > 1) {
+            return page * itemsPerPage;
+        }
+    };
 }
 
 
