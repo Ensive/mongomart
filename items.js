@@ -44,15 +44,47 @@ function ItemDAO(database) {
         */
 
         var categories = [];
-        var category = {
-            _id: "All",
-            num: 9999
-        };
+        var allCount = 0;
+        var query = [
+            //{ $match: { category: { $ne: null } } },
+            { $group: {
+                _id: "$category",
+                num: { $sum: 1 }
+            } },
+            { $sort: { _id: 1 } }
+        ];
 
-        categories.push(category);
+        this.db.collection('item')
+            .aggregate(query)
+            .each((err, doc) => {
+                assert.equal(err, null);
 
+                if (doc) {
+                    allCount += doc.num;
+                    categories.push(doc);
+                // @todo: make sure that this is okay approach
+                } else {
+                    categories.push({
+                        _id: 'All',
+                        num: allCount
+                    });
+                }
+
+                // debugging
+                console.log('Document:', doc);
+                console.log('Categories:', categories);
+                console.log('');
+                console.log('');
+            });
+
+        //var categories = [];
+        //var category = {
+        //    _id: "All",
+        //    num: 9999
+        //};
+
+        //categories.push(category);
         // TODO-lab1A Replace all code above (in this method).
-        
         callback(categories);
     };
 
