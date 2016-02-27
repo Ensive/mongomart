@@ -24,6 +24,7 @@ function ItemDAO(database) {
     'use strict';
 
     this.db = database;
+    // @todo: implement collection variable
 
     this.getCategories = (callback) => {
         'use strict';
@@ -131,11 +132,19 @@ function ItemDAO(database) {
          *
          */
         
-        var item = this.createDummyItem();
+        //var item = this.createDummyItem();
 
         // TODO-lab3 Replace all code above (in this method).
 
-        callback(item);
+        //callback(item);
+
+        this.db.collection('item')
+            .find({ _id: itemId })
+            .limit(1)
+            .next((err, doc) => {
+                assert.equal(err, null);
+                callback(doc);
+            });
     };
 
 
