@@ -19,6 +19,7 @@
 var assert = require('assert');
 
 
+// @todo: rewrite as class and make a module
 function ItemDAO(database) {
     'use strict';
 
@@ -60,7 +61,7 @@ function ItemDAO(database) {
         var cursor = this.db.collection('item').find(query);
 
         // apply .skip() to the cursor if necessary, depending on the page
-        if (page && page > 0) {
+        if (this.isNotFirstPage(page)) {
             cursor.skip(this.paginate(page, itemsPerPage));
         }
 
@@ -207,12 +208,18 @@ function ItemDAO(database) {
 
     };
 
+    // @todo: make it external (move out from a class)
     this.paginate = (page, itemsPerPage) => {
         if (page > 0 && page === 1) {
             return itemsPerPage;
         } else if (page > 1) {
             return page * itemsPerPage;
         }
+    };
+
+    // @todo: make it external (move out from a class)
+    this.isNotFirstPage = (page) => {
+        return page && page > 0;
     };
 }
 
