@@ -82,6 +82,7 @@ function ItemDAO(database) {
         this.db.collection('item')
             .find(query)
             .count((err, count) => {
+                assert.equal(err, null);
                 callback(count);
             });
     };
@@ -105,22 +106,36 @@ function ItemDAO(database) {
          *
          */
         
-        var item = this.createDummyItem();
-        var items = [];
-        for (var i=0; i<5; i++) {
-            items.push(item);
-        }
+        //var item = this.createDummyItem();
+        //var items = [];
+        //for (var i=0; i<5; i++) {
+        //    items.push(item);
+        //}
 
         // TODO-lab2A Replace all code above (in this method).
 
-        callback(items);
+        //callback(items);
+        var searchQuery = { $text: { $search: query }};
+
+        var cursor = this.db.collection('item').find(searchQuery);
+
+        if (this.isNotFirstPage(page)) {
+            cursor.skip(this.paginate(page, itemsPerPage));
+        }
+
+        cursor.limit(itemsPerPage);
+
+        cursor.toArray((err, docs) => {
+            assert.equal(err, null);
+            callback(docs);
+        });
     };
 
 
     this.getNumSearchItems = function(query, callback) {
         "use strict";
 
-        var numItems = 0;
+        //var numItems = 0;
         
         /*
         * TODO-lab2B
@@ -131,7 +146,13 @@ function ItemDAO(database) {
         *
         */
 
-        callback(numItems);
+        //callback(numItems);
+        this.db.collection('item')
+            .find({ $text: { $search: query }})
+            .count((err, count) => {
+                assert.equal(err, null);
+                callback(count);
+            });
     };
 
 
