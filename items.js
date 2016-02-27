@@ -44,7 +44,6 @@ function ItemDAO(database) {
         */
 
         var categories = [];
-        var allCount = 0;
         var query = [
             //{ $match: { category: { $ne: null } } },
             { $group: {
@@ -56,25 +55,34 @@ function ItemDAO(database) {
 
         this.db.collection('item')
             .aggregate(query)
-            .each((err, doc) => {
+            .toArray((err, docs) => {
                 assert.equal(err, null);
 
-                if (doc) {
-                    allCount += doc.num;
-                    categories.push(doc);
+                var allCount = docs.reduce((prev, current, index, array) => index === 1 ? prev.num + current.num : prev + current.num);
+
+                docs.push({
+                    _id: 'All',
+                    num: allCount
+                });
+
+                callback(docs);
+
+                //if (doc) {
+                //    allCount += doc.num;
+                //    categories.push(doc);
                 // @todo: make sure that this is okay approach
-                } else {
-                    categories.push({
-                        _id: 'All',
-                        num: allCount
-                    });
-                }
+                //} else {
+                //    categories.push({
+                //        _id: 'All',
+                //        num: allCount
+                //    });
+                //}
 
                 // debugging
-                console.log('Document:', doc);
-                console.log('Categories:', categories);
-                console.log('');
-                console.log('');
+                //console.log('Documents:', docs);
+                //console.log('Categories:', categories);
+                //console.log('');
+                //console.log('');
             });
 
         //var categories = [];
@@ -85,7 +93,7 @@ function ItemDAO(database) {
 
         //categories.push(category);
         // TODO-lab1A Replace all code above (in this method).
-        callback(categories);
+        //callback(categories);
     };
 
 
