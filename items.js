@@ -88,33 +88,9 @@ function ItemDAO(database) {
     };
 
 
-    this.searchItems = function(query, page, itemsPerPage, callback) {
-        "use strict";
-        
-        /*
-         * TODO-lab2A
-         *
-         * LAB #2A: Using the value of the query parameter passed to this method, perform
-         * a text search against the item collection. Do not sort the results. Select only 
-         * the items that should be displayed for a particular page. For example, on the 
-         * first page, only the first itemsPerPage matching the query should be displayed. 
-         * Use limit() and skip() and the method parameters: page and itemsPerPage to 
-         * select the appropriate matching products. Pass these items to the callback 
-         * function. 
-         *
-         * You will need to create a single text index on title, slogan, and description.
-         *
-         */
-        
-        //var item = this.createDummyItem();
-        //var items = [];
-        //for (var i=0; i<5; i++) {
-        //    items.push(item);
-        //}
+    this.searchItems = (query, page, itemsPerPage, callback) => {
+        'use strict';
 
-        // TODO-lab2A Replace all code above (in this method).
-
-        //callback(items);
         var searchQuery = { $text: { $search: query }};
 
         var cursor = this.db.collection('item').find(searchQuery);
@@ -132,21 +108,9 @@ function ItemDAO(database) {
     };
 
 
-    this.getNumSearchItems = function(query, callback) {
-        "use strict";
+    this.getNumSearchItems = (query, callback) => {
+        'use strict';
 
-        //var numItems = 0;
-        
-        /*
-        * TODO-lab2B
-        *
-        * LAB #2B: Using the value of the query parameter passed to this method, count the
-        * number of items in the "item" collection matching a text search. Pass the count
-        * to the callback function.
-        *
-        */
-
-        //callback(numItems);
         this.db.collection('item')
             .find({ $text: { $search: query }})
             .count((err, count) => {
