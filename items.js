@@ -70,6 +70,7 @@ function ItemDAO(database) {
 
         var cursor = this.db.collection('item').find({});
 
+        // apply skip to the cursor, if necessary depending on the page
         if (page > 1 && page === 2) {
             cursor.skip(itemsPerPage);
         } else if (page > 2) {
@@ -78,18 +79,10 @@ function ItemDAO(database) {
 
         cursor.limit(itemsPerPage);
 
-        var pageItems = [];
-
-        cursor.forEach(
-            (doc) => {
-                console.log(doc);
-                pageItems.push(doc);
-            },
-            (err) => {
-                assert.equal(err, null);
-                //return this.db.close();
-            }
-        );
+        cursor.toArray((err, docs) => {
+            assert.equal(err, null);
+            callback(docs);
+        });
 
         //var pageItem = this.createDummyItem();
         //var pageItems = [];
@@ -99,7 +92,7 @@ function ItemDAO(database) {
 
         // TODO-lab1B Replace all code above (in this method).
 
-        callback(pageItems);
+        //callback(pageItems);
     };
 
 
