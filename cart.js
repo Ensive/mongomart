@@ -66,9 +66,23 @@ function CartDAO(database) {
          *
          */
 
-        callback(null);
+        //callback(null);
 
-        // TODO-lab6 Replace all code above (in this method).
+        var projection = { "items.$": 1, _id: 0 };
+
+        this.db.collection('cart')
+            .find({ userId: userId, "items._id": { $eq: itemId } })
+            .project(projection)
+            .limit(1)
+            .next((err, doc) => {
+                assert.equal(err, null);
+
+                if (doc) {
+                    callback(doc.items[0]);
+                } else {
+                    callback(null);
+                }
+            });
     };
 
     
