@@ -169,24 +169,6 @@ function ItemDAO(database) {
             );
     };
 
-
-    this.createDummyItem = function() {
-        "use strict";
-
-        return {
-            _id: 1,
-            title: "Gray Hooded Sweatshirt",
-            description: "The top hooded sweatshirt we offer",
-            slogan: "Made of 100% cotton",
-            stars: 0,
-            category: "Apparel",
-            img_url: "/img/products/hoodie.jpg",
-            price: 29.99,
-            reviews: []
-        };
-
-    };
-
     // @todo: make it external (move out from a class)
     this.paginate = (page, itemsPerPage) => {
         if (page > 0 && page === 1) {
