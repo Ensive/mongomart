@@ -135,19 +135,20 @@ function ItemDAO(database) {
 
 
     this.getRelatedItems = function(callback) {
-        "use strict";
+        'use strict';
 
-        this.db.collection("item").find({})
+        this.db.collection('item')
+            .find({})
             .limit(4)
-            .toArray(function(err, relatedItems) {
+            .toArray((err, relatedItems) => {
                 assert.equal(null, err);
                 callback(relatedItems);
             });
     };
 
 
-    this.addReview = function(itemId, comment, name, stars, callback) {
-        "use strict";
+    this.addReview = (itemId, comment, name, stars, callback) => {
+        'use strict';
 
         /*
          * TODO-lab4
@@ -165,9 +166,20 @@ function ItemDAO(database) {
             date: Date.now()
         };
 
-        var dummyItem = this.createDummyItem();
-        dummyItem.reviews = [reviewDoc];
-        callback(dummyItem);
+        //var dummyItem = this.createDummyItem();
+        //dummyItem.reviews = [reviewDoc];
+        //callback(dummyItem);
+
+        this.db.collection('item')
+            .updateOne(
+                { _id: itemId },
+                { "$push": { "reviews": reviewDoc } },
+                { upsert: true, w: 1 },
+                (err, result) => {
+                    assert.equal(err, null);
+                    callback(result);
+                }
+            );
     };
 
 

@@ -87,7 +87,7 @@ MongoClient.connect('mongodb://localhost:27017/mongomart', function(err, db) {
                                          pages: numPages,
                                          page: page,
                                          items: pageItems });
-                    
+
                 });
             });
         });
@@ -164,6 +164,7 @@ MongoClient.connect('mongodb://localhost:27017/mongomart', function(err, db) {
                                numReviews: numReviews,
                                relatedItems: relatedItems
                            });
+                // @todo: shall we close db connection here?
             });
         });
     });
