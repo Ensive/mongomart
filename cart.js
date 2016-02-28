@@ -15,8 +15,8 @@
 */
 
 
-var MongoClient = require('mongodb').MongoClient,
-    assert = require('assert');
+//var MongoClient = require('mongodb').MongoClient,
+var assert = require('assert');
 
 
 function CartDAO(database) {
@@ -37,17 +37,25 @@ function CartDAO(database) {
         *
         */
 
-        var userCart = {
-            userId: userId,
-            items: []
-        }
-        var dummyItem = this.createDummyItem();
-        userCart.items.push(dummyItem);
+        //var userCart = {
+        //    userId: userId,
+        //    items: []
+        //};
+        //var dummyItem = this.createDummyItem();
+        //userCart.items.push(dummyItem);
         
         // TODO-lab5 Replace all code above (in this method).
 
-        callback(userCart);
-    }
+        //callback(userCart);
+
+        this.db.collection('cart')
+            .find({ userId: userId })
+            .limit(1)
+            .next((err, doc) => {
+                assert.equal(err, null);
+                callback(doc);
+            });
+    };
 
 
     this.itemInCart = function(userId, itemId, callback) {
@@ -81,7 +89,7 @@ function CartDAO(database) {
         callback(null);
 
         // TODO-lab6 Replace all code above (in this method).
-    }
+    };
 
     
     /*
