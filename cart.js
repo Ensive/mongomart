@@ -20,7 +20,7 @@ var assert = require('assert');
 
 
 function CartDAO(database) {
-    "use strict";
+    'use strict';
 
     this.db = database;
 
@@ -39,7 +39,7 @@ function CartDAO(database) {
 
 
     this.itemInCart = function(userId, itemId, callback) {
-        "use strict";
+        'use strict';
 
         /*
          *
